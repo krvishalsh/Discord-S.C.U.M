@@ -32,7 +32,7 @@ import ua_parser.user_agent_parser
 #client initialization
 class Client:
 	__slots__ = ['log', 'locale', '__user_token', '__user_email', '__user_password', '__totp_secret', '__xfingerprint', 'userData', 'api_version', 'discord', 'websocketurl', 'remoteauthurl', '__user_agent', 's', '__super_properties', 'gateway', 'Science']
-	def __init__(self, email="", password="", secret="", code="", token="", remote_auth=False, proxy=None, user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36", locale="en-US", build_num="request", x_fingerprint="request", log={"console":True, "file":False}):
+	def __init__(self, email="", password="", secret="", code="", token="", remote_auth=False, proxy=None, user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36", locale="en-US", build_num="request", x_fingerprint="request", log={"console":True, "file":False}):
 		#step 1: vars
 		self.log = log
 		self.locale = locale
@@ -53,7 +53,7 @@ class Client:
 		elif isinstance(user_agent, str):
 			self.__user_agent = user_agent
 		else:
-			self.__user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36' #https://discord-user-api.cf/api/v1/properties/web
+			self.__user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36' #https://discord-user-api.cf/api/v1/properties/web
 		parsed_ua = ua_parser.user_agent_parser.Parse(self.__user_agent)
 
 		#step 3: http request headers
@@ -848,24 +848,24 @@ class Client:
 		return imports.SlashCommands(self.discord, self.s, self.log).getSlashCommands(applicationID)
 
 	#trigger a slash command (running /command blah blah blah whatever)
-	def triggerSlashCommand(self, applicationID, channelID, guildID=None, data={}, nonce="calculate"):
-		return imports.SlashCommands(self.discord, self.s, self.log).triggerSlashCommand(applicationID, channelID, guildID, data, nonce)
+	def triggerSlashCommand(self, applicationID, channelID, guildID=None, data={}, nonce="calculate", sessionID="random"):
+		return imports.SlashCommands(self.discord, self.s, self.log).triggerSlashCommand(applicationID, channelID, guildID, data, nonce, sessionID)
 
 	#trigger a user command (right click on bot username, select a command from Apps)
-	def triggerUserCommand(self, applicationID, channelID, guildID=None, data={}, nonce="calculate"):
+	def triggerUserCommand(self, applicationID, channelID, guildID=None, data={}, nonce="calculate", sessionID="random"):
 		if "target_id" not in data:
 			data["target_id"] = applicationID
-		return imports.SlashCommands(self.discord, self.s, self.log).triggerSlashCommand(applicationID, channelID, guildID, data, nonce)
+		return imports.SlashCommands(self.discord, self.s, self.log).triggerSlashCommand(applicationID, channelID, guildID, data, nonce, sessionID)
 
 	#trigger a message command (right click on message, select a command from Apps)
-	def triggerMessageCommand(self, applicationID, messageID, channelID, guildID=None, data={}, nonce="calculate"):
+	def triggerMessageCommand(self, applicationID, messageID, channelID, guildID=None, data={}, nonce="calculate", sessionID="random"):
 		if "target_id" not in data:
 			data["target_id"] = messageID
-		return imports.SlashCommands(self.discord, self.s, self.log).triggerSlashCommand(applicationID, channelID, guildID, data, nonce)
+		return imports.SlashCommands(self.discord, self.s, self.log).triggerSlashCommand(applicationID, channelID, guildID, data, nonce, sessionID)
 
 	#click on a button or select menu option(s)
-	def click(self, applicationID, channelID, messageID, messageFlags, guildID=None, nonce="calculate", data={}):
-		return imports.Buttons(self.discord, self.s, self.log).click(applicationID, channelID, messageID, messageFlags, guildID, nonce, data)
+	def click(self, applicationID, channelID, messageID, messageFlags, guildID=None, nonce="calculate", data={}, sessionID="random"):
+		return imports.Buttons(self.discord, self.s, self.log).click(applicationID, channelID, messageID, messageFlags, guildID, nonce, data, sessionID)
 
 	'''
 	"Science", aka Discord's tracking endpoint (https://luna.gitlab.io/discord-unofficial-docs/science.html - "Discord argues that they need to collect the data in the case the User allows the usage of the data later on. Which in [luna's] opinion is complete bullshit. Have a good day.")
